@@ -33,6 +33,8 @@ A node process can only do some much on its own. They should be able to discuss 
 ### Case Study 1: Our server is being hit with multiple requests at once from many different clients and the server can barely handle it anymore
 
 This would be a nice use case of a load balancer
+- but it's still only one load balancer so it's at risk for bottlenecks.  Not a perfect solution but nothing's perfect. 
+
 
 A loader balancer shares the love of traffic/requests across a cluster of servers. Load balancers keep track of the status of our resources by performing regular health checks on our servers. This is also known as horizontal scaling where we add more servers to help us scale. Think of it like adding more buildings to a neighborhood (horizontal) vs. Adding more floor to a building (vertical).
 
@@ -50,6 +52,9 @@ Lead them to thinking about a cache. Specifically you want them to talk about a 
 
 ![Sample Diagram of Web Application Layers with Caching](./assets/WebAppLayersCache.png)
 
+- If we know the query will be called and is a little slow we can cache it and instead of rerunning the whole process we just grab the result of the process that we have cached. Cache should only contain the result of the query that is being run the MOST. LFU least frequently used- is the first one we get rid of in the cache that is being used the least. we evict that one from the cache and replace it with the most used query. 
+- Caches can be set up with database system , on the server side as a stored memory object on the server (on the end). So it would be set up at the end of the server side call or at the beginning of the database system. 
+
 ### Case Study 3: Our application is a monolith. If we make changes to a specific part of our application, we need to redeploy the entire thing
 
 The solution to this would be microservices. Microservices are their own environments of codebases, deployment strategies, servers, etc. They are usually used to separate tightly coupled functionality or separate different business use cases into their own services (Ex: Uber Taxi and Uber Eats could be two different microservices). They should be able to identify what would be a feature on Fandango that would be appropriate to split into microservices.
@@ -62,7 +67,7 @@ The Booking Service would be a good candidate to split into microservices. In ad
 An important discussion to have is how do these services communicate with each other? There are many ways in which we know such as our typical REST API but we can also use pub/sub design pattern. Since, the latter is out of scope, it can be ignored. The short answer is that the pub/sub pattern is a generalization of something we have used way back when: `addEventListener`
 
 ### Sample Active Reservation Service
-
+- chose to do booking system in this example. Could be payments or something else. 
 - Keep the reservation on a cache for about 5 minutes
 - Could update Booking table in DB with expiry time and status would be set to “On Hold”
 - If 5 minutes passes, the hold is released
@@ -72,7 +77,7 @@ An important discussion to have is how do these services communicate with each o
     - Send update to Seat Waiting Service
 
 ### Sample Seat Waiting Service
-
+When something is super popular....queue list. 
 - Queue of waiting users for seats
     - First come; first serve
     - Users can add themselves to queue of waiting list on a possible seat or the booking in general
